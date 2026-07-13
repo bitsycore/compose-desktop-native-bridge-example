@@ -60,6 +60,11 @@ kotlin {
             implementation("org.jetbrains.compose.foundation:foundation-layout:1.12.0-beta01")
             implementation("org.jetbrains.compose.animation:animation-core:1.12.0-beta01")
             implementation("org.jetbrains.compose.material3:material3:1.12.0-alpha03")
+            // The OFFICIAL resources runtime — composeResources/ + generated
+            // Res.* accessors work like on every other platform; the bridge
+            // substitutes the port's runtime on native, and its packaging
+            // task bundles data.kres next to the executables automatically.
+            implementation("org.jetbrains.compose.components:components-resources:1.12.0-beta01")
         }
         nativeMain.dependencies {
             // The port's window shell + SDL3 main loop (its own API, not a

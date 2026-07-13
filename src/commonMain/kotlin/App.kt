@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,7 +39,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import bubble_wrap.generated.resources.Res
+import bubble_wrap.generated.resources.all_popped
+import bubble_wrap.generated.resources.app_title
+import bubble_wrap.generated.resources.bubble
 import kotlin.math.roundToInt
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 // ==================
 // MARK: Bubble Wrap — the shared app
@@ -73,10 +80,14 @@ private fun BubbleWrap(dark: Boolean, onToggleDark: () -> Unit) {
         // ============
         //  Header — title, score, theme toggle, reset
         Row(verticalAlignment = Alignment.CenterVertically) {
+            // composeResources drawable — decoded by the active renderer.
+            Image(painterResource(Res.drawable.bubble), contentDescription = null, modifier = Modifier.size(48.dp))
+            Spacer(Modifier.width(10.dp))
             Column {
-                Text("Bubble Wrap", style = MaterialTheme.typography.headlineMedium)
+                // composeResources strings — values/strings.xml, same as anywhere.
+                Text(stringResource(Res.string.app_title), style = MaterialTheme.typography.headlineMedium)
                 Text(
-                    if (allPopped) "All popped — very satisfying." else "${popped.size} / $total popped",
+                    if (allPopped) stringResource(Res.string.all_popped) else "${popped.size} / $total popped",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

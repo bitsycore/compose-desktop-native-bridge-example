@@ -11,7 +11,10 @@ complete consumer example for
   (x64 / arm64) and macOS (arm64) — **no JVM**, rendering through SDL3/Skia.
 
 Pop bubbles, resize them with a slider, flip dark/light, get a fresh sheet.
-Bouncy spring physics included.
+Bouncy spring physics included. The bubble logo and the strings come from
+**`composeResources/`** — same files, same generated `Res.*` accessors on
+every platform; on the native targets the bridge bundles them into
+`data.kres` next to the executable automatically.
 
 ## The point
 
