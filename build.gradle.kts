@@ -32,9 +32,6 @@ kotlin {
             implementation("org.jetbrains.compose.runtime:runtime:1.11.1")
             implementation("org.jetbrains.compose.ui:ui:1.12.0-beta01")
             implementation("org.jetbrains.compose.ui:ui-graphics:1.12.0-beta01")
-            // ui-text: TextStyle appears in Text/Typography SIGNATURES even
-            // without importing androidx.compose.ui.text — signature types
-            // count as "touched" for common-metadata visibility.
             implementation("org.jetbrains.compose.ui:ui-text:1.12.0-beta01")
             implementation("org.jetbrains.compose.ui:ui-unit:1.12.0-beta01")
             implementation("org.jetbrains.compose.foundation:foundation:1.12.0-beta01")
