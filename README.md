@@ -5,6 +5,7 @@ complete consumer example for
 [compose-desktop-native](https://github.com/bitsycore/compose-desktop-native)'s
 **bridge plugin**: one shared Compose Multiplatform codebase that runs
 
+- on **Android** (Google's androidx.compose artifacts),
 - on **upstream Compose Desktop** (JVM), and
 - as **self-contained native executables** — Windows (mingwX64), Linux
   (x64 / arm64) and macOS (arm64) — **no JVM**, rendering through SDL3/Skia.
@@ -25,8 +26,10 @@ plugins { id("com.bitsycore.compose-desktop-native.bridge") version "0.1.14" }
 
 On the Kotlin/Native desktop targets the plugin substitutes
 compose-desktop-native's klibs for those coordinates; every other target keeps
-resolving upstream. SDL3 and its codecs ship as static archives *inside* the
-klibs — nothing to install, and a distributable is just the executable.
+resolving upstream — on **Android**, JetBrains' own artifacts already redirect
+to Google's `androidx.compose.*`, the exact same trick one layer up. SDL3 and
+its codecs ship as static archives *inside* the klibs — nothing to install,
+and a distributable is just the executable.
 
 ## Setup
 
@@ -49,6 +52,9 @@ gpr.token=<your-pat>
 
 # Upstream Compose Desktop (JVM) — the same App()
 ./gradlew run
+
+# Android — the same App() on androidx.compose
+./gradlew installDebug        # or open in Android Studio
 ```
 
 Linux needs the usual GL/X11/fontconfig dev basics at link time

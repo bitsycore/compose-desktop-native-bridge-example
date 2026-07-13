@@ -1,3 +1,5 @@
+package bubblewrap
+
 import com.compose.sdl.nativeComposeWindow
 
 // Native entry point — compose-desktop-native's SDL3 window shell. No JVM:

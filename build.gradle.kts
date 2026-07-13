@@ -4,6 +4,7 @@ plugins {
     kotlin("multiplatform") version "2.4.0"
     id("org.jetbrains.kotlin.plugin.compose") version "2.4.0"
     id("org.jetbrains.compose") version "1.12.0-beta01"
+    id("com.android.application") version "9.2.1"
 }
 
 // The port's version for its OWN artifacts (:window — the SDL shell has no
@@ -14,6 +15,11 @@ val cdnVersion = providers.gradleProperty("composeDesktopNative.version").orNull
 kotlin {
     jvm()
 
+    // Android needs NO bridge involvement: the org.jetbrains.compose
+    // artifacts' Android variants already redirect to Google's
+    // androidx.compose ones — JetBrains' own version of the same trick.
+    androidTarget()
+
     macosArm64()
     linuxX64()
     linuxArm64()
@@ -23,7 +29,7 @@ kotlin {
         val isMingw = name == "mingwX64"
         val isLinux = name.startsWith("linux")
         binaries.executable {
-            entryPoint = "main"
+            entryPoint = "bubblewrap.main"
             // SDL3 + FreeType (+ SDL3_ttf / SDL3_image on Windows) ship as
             // static archives INSIDE the port's cinterop klibs — nothing to
             // install, no runtime DLLs. Only shell-level flags live here.
@@ -64,11 +70,30 @@ kotlin {
             // Upstream Compose Desktop for the jvm window shell.
             implementation(compose.desktop.currentOs)
         }
+        androidMain.dependencies {
+            implementation("androidx.activity:activity-compose:1.11.0")
+        }
     }
 }
 
 compose.desktop {
     application {
-        mainClass = "MainJvmKt"
+        mainClass = "bubblewrap.MainJvmKt"
+    }
+}
+
+android {
+    namespace = "com.bitsycore.bubblewrap"
+    compileSdk = 37
+    defaultConfig {
+        applicationId = "com.bitsycore.bubblewrap"
+        minSdk = 24
+        targetSdk = 36
+        versionCode = 1
+        versionName = "1.0"
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
