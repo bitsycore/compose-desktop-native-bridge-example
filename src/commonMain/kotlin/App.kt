@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -76,7 +77,9 @@ private fun BubbleWrap(dark: Boolean, onToggleDark: () -> Unit) {
     var popped by remember { mutableStateOf(setOf<Int>()) }
     val allPopped = popped.size == total
 
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
+    // safeDrawingPadding: keeps content clear of system bars under Android's
+    // edge-to-edge (the Surface still paints behind them); zero on desktop.
+    Column(Modifier.fillMaxSize().safeDrawingPadding().padding(16.dp)) {
         // ============
         //  Header — title, score, theme toggle, reset
         Row(verticalAlignment = Alignment.CenterVertically) {
