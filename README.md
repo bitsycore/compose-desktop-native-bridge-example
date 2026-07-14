@@ -16,12 +16,25 @@ Bouncy spring physics included. The bubble logo and the strings come from
 every platform; on the native targets the bridge bundles them into
 `data.kres` next to the executable automatically.
 
+## Layout
+
+Two modules, the current Android-recommended shape for a KMP app:
+
+- **`:shared`** — the whole app as a Compose Multiplatform library. The
+  Android target comes from AGP's KMP library plugin
+  (`com.android.kotlin.multiplatform.library`), declared as
+  `androidLibrary {}` right inside the `kotlin {}` block — no `android {}`
+  block, no manifest. The jvm/native desktop entry points and the bridge
+  plugin live here too.
+- **`:androidApp`** — a plain `com.android.application` module: one
+  Activity, one manifest, `implementation(project(":shared"))`.
+
 ## The point
 
-`src/commonMain` contains only plain Compose code against the **official**
-`androidx.compose.*` API, and `build.gradle.kts` declares only the **official**
-`org.jetbrains.compose.*` coordinates. One line in `settings.gradle.kts` does
-the rest:
+`shared/src/commonMain` contains only plain Compose code against the
+**official** `androidx.compose.*` API, and `shared/build.gradle.kts` declares
+only the **official** `org.jetbrains.compose.*` coordinates. One line in
+`settings.gradle.kts` does the rest:
 
 ```kotlin
 plugins { id("com.bitsycore.compose-desktop-native.bridge") version "0.1.17" }
@@ -49,15 +62,15 @@ gpr.token=<your-pat>
 
 ```bash
 # Native — self-contained executable, no JVM
-./gradlew runDebugExecutableMingwX64      # Windows
-./gradlew runDebugExecutableLinuxX64      # Linux
-./gradlew runDebugExecutableMacosArm64    # macOS (Apple Silicon)
+./gradlew :shared:runDebugExecutableMingwX64      # Windows
+./gradlew :shared:runDebugExecutableLinuxX64      # Linux
+./gradlew :shared:runDebugExecutableMacosArm64    # macOS (Apple Silicon)
 
 # Upstream Compose Desktop (JVM) — the same App()
-./gradlew run
+./gradlew :shared:run
 
 # Android — the same App() on androidx.compose
-./gradlew installDebug        # or open in Android Studio
+./gradlew :androidApp:installDebug        # or open in Android Studio
 ```
 
 Linux needs the usual GL/X11/fontconfig dev basics at link time
@@ -70,7 +83,7 @@ Publish snapshots from a compose-desktop-native checkout
 :compose-desktop-native-bridge:publishToMavenLocal`), then:
 
 ```bash
-./gradlew runDebugExecutableMingwX64 \
+./gradlew :shared:runDebugExecutableMingwX64 \
   -PbridgeVersion=0.0.0-SNAPSHOT \
   -PcomposeDesktopNative.version=0.0.0-SNAPSHOT
 ```
