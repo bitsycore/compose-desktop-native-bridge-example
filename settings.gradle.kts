@@ -17,15 +17,23 @@ pluginManagement {
         }
     }
     plugins {
-        // -PbridgeVersion=… overrides (e.g. a locally-published snapshot).
-        val bridgeVersion = providers.gradleProperty("bridgeVersion")
+        // -PbridgeVersion=… overrides (e.g. locally-published snapshot).
+        val bridgeVersion = providers.gradleProperty("bridgeVersion").get()
+        val kotlinVersion = "2.4.10"
+        val agpVersion = "9.2.1"
+        val cmpVersion = "1.12.0-beta02"
+
+        kotlin("multiplatform") version kotlinVersion apply false
+        id("org.jetbrains.kotlin.android") version kotlinVersion apply false
+        id("org.jetbrains.kotlin.plugin.compose") version kotlinVersion apply false
+
+
         id("com.bitsycore.compose-desktop-native.bridge") version bridgeVersion apply false
-        kotlin("multiplatform") version "2.4.10" apply false
-        id("org.jetbrains.kotlin.android") version "2.4.10" apply false
-        id("org.jetbrains.kotlin.plugin.compose") version "2.4.10" apply false
-        id("org.jetbrains.compose") version "1.12.0-beta02" apply false
-        id("com.android.application") version "9.2.1" apply false
-        id("com.android.kotlin.multiplatform.library") version "9.2.1" apply false
+
+        id("org.jetbrains.compose") version cmpVersion apply false
+
+        id("com.android.application") version agpVersion apply false
+        id("com.android.kotlin.multiplatform.library") version agpVersion apply false
     }
 }
 
