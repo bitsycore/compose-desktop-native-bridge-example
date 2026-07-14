@@ -1,8 +1,8 @@
 plugins {
-    kotlin("multiplatform") version "2.4.0"
-    id("org.jetbrains.kotlin.plugin.compose") version "2.4.0"
-    id("org.jetbrains.compose") version "1.12.0-beta01"
-    id("com.android.application") version "9.2.1"
+    kotlin("multiplatform")
+    id("org.jetbrains.kotlin.plugin.compose")
+    id("org.jetbrains.compose")
+    id("com.android.application")
     id("com.bitsycore.compose-desktop-native.bridge")
 }
 
@@ -22,16 +22,16 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // Plugin redirect properly CMP artifacts
-            implementation("org.jetbrains.compose.runtime:runtime:1.11.1")
-            implementation("org.jetbrains.compose.ui:ui:1.12.0-beta01")
-            implementation("org.jetbrains.compose.ui:ui-graphics:1.12.0-beta01")
-            implementation("org.jetbrains.compose.ui:ui-text:1.12.0-beta01")
-            implementation("org.jetbrains.compose.ui:ui-unit:1.12.0-beta01")
-            implementation("org.jetbrains.compose.foundation:foundation:1.12.0-beta01")
-            implementation("org.jetbrains.compose.foundation:foundation-layout:1.12.0-beta01")
-            implementation("org.jetbrains.compose.animation:animation-core:1.12.0-beta01")
+            implementation("org.jetbrains.compose.runtime:runtime:1.12.0-beta02")
+            implementation("org.jetbrains.compose.ui:ui:1.12.0-beta02")
+            implementation("org.jetbrains.compose.ui:ui-graphics:1.12.0-beta02")
+            implementation("org.jetbrains.compose.ui:ui-text:1.12.0-beta02")
+            implementation("org.jetbrains.compose.ui:ui-unit:1.12.0-beta02")
+            implementation("org.jetbrains.compose.foundation:foundation:1.12.0-beta02")
+            implementation("org.jetbrains.compose.foundation:foundation-layout:1.12.0-beta02")
+            implementation("org.jetbrains.compose.animation:animation-core:1.12.0-beta02")
             implementation("org.jetbrains.compose.material3:material3:1.12.0-alpha03")
-            implementation("org.jetbrains.compose.components:components-resources:1.12.0-beta01")
+            implementation("org.jetbrains.compose.components:components-resources:1.12.0-beta02")
         }
         nativeMain.dependencies {
             // Compose Desktop Native entry point
