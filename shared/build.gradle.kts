@@ -29,6 +29,7 @@ kotlin {
             // Plugin redirect properly CMP artifacts
             implementation("org.jetbrains.compose.runtime:runtime:1.12.0-beta02")
             implementation("org.jetbrains.compose.ui:ui:1.12.0-beta02")
+            implementation("org.jetbrains.compose.ui:ui-geometry:1.12.0-beta02")
             implementation("org.jetbrains.compose.ui:ui-graphics:1.12.0-beta02")
             implementation("org.jetbrains.compose.ui:ui-text:1.12.0-beta02")
             implementation("org.jetbrains.compose.ui:ui-unit:1.12.0-beta02")

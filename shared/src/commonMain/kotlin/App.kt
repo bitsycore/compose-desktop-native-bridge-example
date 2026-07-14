@@ -3,12 +3,14 @@ package bubblewrap
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +21,6 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +37,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,8 +70,10 @@ fun App() {
 
 @Composable
 private fun BubbleWrap(dark: Boolean, onToggleDark: () -> Unit) {
-    var columns by remember { mutableStateOf(7f) }
-    val cols = columns.roundToInt()
+    // Slider stores a size level 0..5; higher level = fewer columns = bigger
+    // bubbles (each bubble fills its grid cell, see Bubble below).
+    var bubbleSize by remember { mutableStateOf(3f) }
+    val cols = 10 - bubbleSize.roundToInt()
     val total = cols * (84 / cols)   // ~84 bubbles, full rows only
     val rows = total / cols
 
@@ -106,9 +110,9 @@ private fun BubbleWrap(dark: Boolean, onToggleDark: () -> Unit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Bubble size", style = MaterialTheme.typography.labelLarge)
             Slider(
-                value = columns,
-                onValueChange = { columns = it; popped = emptySet() },
-                valueRange = 5f..10f,
+                value = bubbleSize,
+                onValueChange = { bubbleSize = it; popped = emptySet() },
+                valueRange = 0f..5f,
                 steps = 4,
                 modifier = Modifier.width(220.dp).padding(start = 12.dp),
             )
@@ -144,33 +148,43 @@ private fun Bubble(popped: Boolean, onPop: () -> Unit, modifier: Modifier = Modi
         targetValue = if (popped) 0.55f else 1f,
         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium),
     )
+    val interactions = remember { MutableInteractionSource() }
+    val hovered by interactions.collectIsHoveredAsState()
+
     val color =
         if (popped) MaterialTheme.colorScheme.surfaceVariant
         else MaterialTheme.colorScheme.primaryContainer
+    val highlight = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)
+    val hoverTint = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.08f)
 
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        Box(
-            Modifier
-                .padding(2.dp)
-                .size(44.dp)
-                .graphicsLayer { scaleX = scale; scaleY = scale }
-                .clip(CircleShape)
-                .background(color)
-                .clickable(enabled = !popped, onClick = onPop),
-            contentAlignment = Alignment.Center,
-        ) {
-            // A subtle highlight dot sells the "unpopped" 3D look.
-            if (!popped) {
-                Box(
-                    Modifier
-                        .size(14.dp)
-                        .graphicsLayer { translationX = -8f; translationY = -8f }
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f))
-                )
-            } else {
-                Text("pop", fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+    // The bubble fills its weight-distributed grid cell and stays square, so
+    // the column count actually drives the diameter: fewer columns = bigger.
+    // Bubble, highlight dot and hover feedback are plain circles in a single
+    // drawBehind — no clip layers and no ripple (the ripple's hover state
+    // layer is a bounds-sized square, and per-bubble clipped layers are what
+    // made the native renderer crawl). Only the pop squish keeps a layer.
+    Box(
+        modifier
+            .padding(2.dp)
+            .aspectRatio(1f)
+            .graphicsLayer { scaleX = scale; scaleY = scale }
+            .drawBehind {
+                drawCircle(color)
+                if (!popped) {
+                    // The highlight dot that sells the "unpopped" 3D look.
+                    drawCircle(
+                        color = highlight,
+                        radius = size.minDimension * 0.15f,
+                        center = center - Offset(size.width, size.height) * 0.165f,
+                    )
+                    if (hovered) drawCircle(hoverTint)
+                }
             }
+            .clickable(interactionSource = interactions, indication = null, enabled = !popped, onClick = onPop),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (popped) {
+            Text("pop", fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
         }
     }
 }
