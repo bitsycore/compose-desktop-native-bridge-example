@@ -85,7 +85,7 @@ Publish snapshots from a compose-desktop-native checkout
 ```bash
 ./gradlew :shared:runDebugExecutableMingwX64 \
   -PbridgeVersion=0.0.0-SNAPSHOT \
-  -PcomposeDesktopNative.version=0.0.0-SNAPSHOT
+  -PcomposeDesktopNativeVersion=0.0.0-SNAPSHOT
 ```
 
 ## License

@@ -6,9 +6,6 @@ plugins {
     id("com.bitsycore.compose-desktop-native.bridge")
 }
 
-// Compose Desktop Native own artifact version
-val cdnVersion = providers.gradleProperty("composeDesktopNative.version").get()
-
 kotlin {
     jvm()
 
@@ -27,19 +24,23 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // Plugin redirect properly CMP artifacts
-            implementation("org.jetbrains.compose.runtime:runtime:1.12.0-beta02")
-            implementation("org.jetbrains.compose.ui:ui:1.12.0-beta02")
-            implementation("org.jetbrains.compose.ui:ui-geometry:1.12.0-beta02")
-            implementation("org.jetbrains.compose.ui:ui-graphics:1.12.0-beta02")
-            implementation("org.jetbrains.compose.ui:ui-text:1.12.0-beta02")
-            implementation("org.jetbrains.compose.ui:ui-unit:1.12.0-beta02")
-            implementation("org.jetbrains.compose.foundation:foundation:1.12.0-beta02")
-            implementation("org.jetbrains.compose.foundation:foundation-layout:1.12.0-beta02")
-            implementation("org.jetbrains.compose.animation:animation-core:1.12.0-beta02")
-            implementation("org.jetbrains.compose.material3:material3:1.12.0-alpha03")
-            implementation("org.jetbrains.compose.components:components-resources:1.12.0-beta02")
+            val version = providers.gradleProperty("composeMultiplatformVersion").get()
+            implementation("org.jetbrains.compose.runtime:runtime:$version")
+            implementation("org.jetbrains.compose.ui:ui:$version")
+            implementation("org.jetbrains.compose.ui:ui-geometry:$version")
+            implementation("org.jetbrains.compose.ui:ui-graphics:$version")
+            implementation("org.jetbrains.compose.ui:ui-text:$version")
+            implementation("org.jetbrains.compose.ui:ui-unit:$version")
+            implementation("org.jetbrains.compose.foundation:foundation:$version")
+            implementation("org.jetbrains.compose.foundation:foundation-layout:$version")
+            implementation("org.jetbrains.compose.animation:animation-core:$version")
+            implementation("org.jetbrains.compose.components:components-resources:$version")
+            val m3Version = providers.gradleProperty("material3ComposeVersion").get()
+            implementation("org.jetbrains.compose.material3:material3:$m3Version")
         }
         nativeMain.dependencies {
+            // Compose Desktop Native own artifact version
+            val cdnVersion = providers.gradleProperty("composeDesktopNativeVersion").get()
             // Compose Desktop Native entry point
             implementation("com.bitsycore.compose.sdl:window:$cdnVersion")
         }

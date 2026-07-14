@@ -19,14 +19,13 @@ pluginManagement {
     plugins {
         // -PbridgeVersion=… overrides (e.g. locally-published snapshot).
         val bridgeVersion = providers.gradleProperty("bridgeVersion").get()
-        val kotlinVersion = "2.4.10"
-        val agpVersion = "9.2.1"
-        val cmpVersion = "1.12.0-beta02"
+        val cmpVersion = providers.gradleProperty("composeMultiplatformVersion").get()
+        val kotlinVersion = providers.gradleProperty("kotlinVersion").get()
+        val agpVersion = providers.gradleProperty("agpVersion").get()
 
         kotlin("multiplatform") version kotlinVersion apply false
         id("org.jetbrains.kotlin.android") version kotlinVersion apply false
         id("org.jetbrains.kotlin.plugin.compose") version kotlinVersion apply false
-
 
         id("com.bitsycore.compose-desktop-native.bridge") version bridgeVersion apply false
 
