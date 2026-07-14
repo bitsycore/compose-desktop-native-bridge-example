@@ -18,7 +18,7 @@ pluginManagement {
     }
     plugins {
         // -PbridgeVersion=… overrides (e.g. a locally-published snapshot).
-        id("com.bitsycore.compose-desktop-native.bridge") version (providers.gradleProperty("bridgeVersion").orNull ?: "0.1.14")
+        id("com.bitsycore.compose-desktop-native.bridge") version (providers.gradleProperty("bridgeVersion").orNull ?: "0.1.16")
     }
 }
 

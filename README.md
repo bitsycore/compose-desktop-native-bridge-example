@@ -24,7 +24,7 @@ every platform; on the native targets the bridge bundles them into
 the rest:
 
 ```kotlin
-plugins { id("com.bitsycore.compose-desktop-native.bridge") version "0.1.14" }
+plugins { id("com.bitsycore.compose-desktop-native.bridge") version "0.1.16" }
 ```
 
 On the Kotlin/Native desktop targets the plugin substitutes
