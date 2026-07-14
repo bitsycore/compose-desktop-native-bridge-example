@@ -12,8 +12,6 @@ val cdnVersion = providers.gradleProperty("composeDesktopNative.version").get()
 kotlin {
     jvm()
 
-    // Android via AGP's KMP library plugin — the android target is configured
-    // right here, no android {} block and no AndroidManifest.xml needed.
     android {
         namespace = "com.bitsycore.bubblewrap.shared"
         compileSdk = 37
