@@ -1,14 +1,13 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-
 plugins {
     kotlin("multiplatform") version "2.4.0"
     id("org.jetbrains.kotlin.plugin.compose") version "2.4.0"
     id("org.jetbrains.compose") version "1.12.0-beta01"
     id("com.android.application") version "9.2.1"
+    id("com.bitsycore.compose-desktop-native.bridge")
 }
 
 // Compose Desktop Native own artifact version
-val cdnVersion = providers.gradleProperty("composeDesktopNative.version").orNull ?: "0.1.16"
+val cdnVersion = providers.gradleProperty("composeDesktopNative.version").orNull ?: "0.1.17"
 
 kotlin {
     jvm()
@@ -19,12 +18,6 @@ kotlin {
     linuxX64()
     linuxArm64()
     mingwX64()
-
-    targets.withType<KotlinNativeTarget>().all {
-        binaries.executable {
-            entryPoint = "bubblewrap.main"
-        }
-    }
 
     sourceSets {
         commonMain.dependencies {
@@ -56,8 +49,14 @@ kotlin {
 }
 
 compose.desktop {
+    // Upstream Compose Desktop (jvm) entry point.
     application {
         mainClass = "bubblewrap.MainJvmKt"
+    }
+    // compose-desktop-native entry point — the bridge plugin declares an
+    // executable with this entry point on every native desktop target.
+    native {
+        entryPoint = "bubblewrap.main"
     }
 }
 
