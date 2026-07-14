@@ -7,7 +7,7 @@ plugins {
 }
 
 // Compose Desktop Native own artifact version
-val cdnVersion = providers.gradleProperty("composeDesktopNative.version").orNull ?: "0.1.17"
+val cdnVersion = providers.gradleProperty("composeDesktopNative.version").get()
 
 kotlin {
     jvm()
