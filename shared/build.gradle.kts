@@ -21,28 +21,35 @@ kotlin {
     linuxArm64()
     mingwX64()
 
+    // The bridge plugin reports the exact Compose versions the port tracks, so
+    // we never hand-match them against the release (material3 is versioned
+    // separately upstream — an easy mismatch this removes). `.version` is the
+    // port klib version being substituted.
+    val cmp = composeDesktopNative.compose
+    val cmpMaterial3 = composeDesktopNative.composeMaterial3
+    val cmpRuntime = composeDesktopNative.composeRuntime
+    val cdn = composeDesktopNative.version
+
     sourceSets {
         commonMain.dependencies {
-            // Plugin redirect properly CMP artifacts
-            val version = providers.gradleProperty("composeMultiplatformVersion").get()
-            implementation("org.jetbrains.compose.runtime:runtime:$version")
-            implementation("org.jetbrains.compose.ui:ui:$version")
-            implementation("org.jetbrains.compose.ui:ui-geometry:$version")
-            implementation("org.jetbrains.compose.ui:ui-graphics:$version")
-            implementation("org.jetbrains.compose.ui:ui-text:$version")
-            implementation("org.jetbrains.compose.ui:ui-unit:$version")
-            implementation("org.jetbrains.compose.foundation:foundation:$version")
-            implementation("org.jetbrains.compose.foundation:foundation-layout:$version")
-            implementation("org.jetbrains.compose.animation:animation-core:$version")
-            implementation("org.jetbrains.compose.components:components-resources:$version")
-            val m3Version = providers.gradleProperty("material3ComposeVersion").get()
-            implementation("org.jetbrains.compose.material3:material3:$m3Version")
+            // Official CMP coords: the bridge substitutes these for the port's
+            // klibs on the native desktop targets; android/jvm resolve them as-is.
+            implementation("org.jetbrains.compose.runtime:runtime:$cmpRuntime")
+            implementation("org.jetbrains.compose.ui:ui:$cmp")
+            implementation("org.jetbrains.compose.ui:ui-geometry:$cmp")
+            implementation("org.jetbrains.compose.ui:ui-graphics:$cmp")
+            implementation("org.jetbrains.compose.ui:ui-text:$cmp")
+            implementation("org.jetbrains.compose.ui:ui-unit:$cmp")
+            implementation("org.jetbrains.compose.foundation:foundation:$cmp")
+            implementation("org.jetbrains.compose.foundation:foundation-layout:$cmp")
+            implementation("org.jetbrains.compose.animation:animation-core:$cmp")
+            implementation("org.jetbrains.compose.components:components-resources:$cmp")
+            implementation("org.jetbrains.compose.material3:material3:$cmpMaterial3")
         }
         nativeMain.dependencies {
-            // Compose Desktop Native own artifact version
-            val cdnVersion = providers.gradleProperty("composeDesktopNativeVersion").get()
-            // Compose Desktop Native entry point
-            implementation("com.bitsycore.compose.sdl:window:$cdnVersion")
+            // The port's own windowing / main-loop API (not substituted); tracks
+            // the substituted version the bridge is using.
+            implementation("com.bitsycore.compose.sdl:window:$cdn")
         }
         jvmMain.dependencies {
             // Compose Desktop entry point
