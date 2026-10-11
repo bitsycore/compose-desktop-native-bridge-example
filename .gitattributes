@@ -1,0 +1,6 @@
+# Keep the Unix wrapper script LF (a CRLF gradlew breaks under Linux/WSL),
+# the Windows one CRLF, and binaries untouched.
+gradlew text eol=lf
+*.bat text eol=crlf
+*.jar binary
+*.png binary

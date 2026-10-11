@@ -1,9 +1,8 @@
 plugins {
-    kotlin("multiplatform") apply false
-    id("org.jetbrains.kotlin.android") apply false
-    id("org.jetbrains.kotlin.plugin.compose") apply false
-    id("org.jetbrains.compose") apply false
-    id("com.android.application") apply false
-    id("com.android.kotlin.multiplatform.library") apply false
-    id("com.bitsycore.compose-desktop-native.bridge") apply false
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.compose) apply false
+    alias(libs.plugins.compose.multiplatform) apply false
+    alias(libs.plugins.compose.desktop.native.bridge) apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.kmp.library) apply false
 }

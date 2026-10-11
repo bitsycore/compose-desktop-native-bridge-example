@@ -1,9 +1,9 @@
 plugins {
-    kotlin("multiplatform")
-    id("org.jetbrains.kotlin.plugin.compose")
-    id("org.jetbrains.compose")
-    id("com.android.kotlin.multiplatform.library")
-    id("com.bitsycore.compose-desktop-native.bridge")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.android.kmp.library)
+    alias(libs.plugins.compose.desktop.native.bridge)
 }
 
 kotlin {
@@ -11,8 +11,8 @@ kotlin {
 
     android {
         namespace = "com.bitsycore.bubblewrap.shared"
-        compileSdk = 37
-        minSdk = 24
+        compileSdk = libs.versions.androidCompileSdk.get().toInt()
+        minSdk = libs.versions.androidMinSdk.get().toInt()
     }
 
     // Compose Desktop Native
@@ -22,7 +22,7 @@ kotlin {
     mingwX64()
 
     // The bridge plugin reports the exact Compose versions the port tracks, so
-    // we never hand-match them against the release (material3 is versioned
+    // they are never hand-matched against the release (material3 is versioned
     // separately upstream - an easy mismatch this removes). `.version` is the
     // port klib version being substituted.
     val cmp = composeDesktopNative.compose
@@ -48,7 +48,7 @@ kotlin {
         }
         nativeMain.dependencies {
             // The port's own windowing / main-loop API (not substituted); tracks
-            // the substituted version the bridge is using. Renamed from :window in 0.4.0.
+            // the port version the bridge substitutes.
             implementation("com.bitsycore.compose:desktop-native-window:$cdn")
         }
         jvmMain.dependencies {
@@ -59,7 +59,7 @@ kotlin {
 }
 
 compose.resources {
-    // Keep the Res package from the single-module days so App.kt's
+    // Keep the Res package from the single-module days so the
     // bubble_wrap.generated.resources imports stay stable.
     packageOfResClass = "bubble_wrap.generated.resources"
 }
@@ -69,9 +69,19 @@ compose.desktop {
     application {
         mainClass = "bubblewrap.MainJvmKt"
     }
-    // compose-desktop-native entry point - the bridge plugin declares an
-    // executable with this entry point on every native desktop target.
+    // compose-desktop-native: declares an executable with this entry point on
+    // every native desktop target, and packages data.kres next to it.
     native {
         entryPoint = "bubblewrap.main"
+        // Window / taskbar icon: decoded to data.kres icon/bubble.rgba, picked up
+        // by Window(icon = AppWindowIcon(...)) in Main.kt.
+        icon {
+            light.from("src/commonMain/composeResources/drawable/bubble.png")
+            // Embedding the icon in the Windows .exe needs `windres` (mingw-w64
+            // binutils) on PATH - off here so the example builds out of the box.
+            embedWindowsIcon.set(false)
+        }
+        // Noto Sans (+ Italic) and Noto Sans Mono, the port's default fonts, are
+        // bundled into data.kres by default - `fonts { }` only opts out.
     }
 }

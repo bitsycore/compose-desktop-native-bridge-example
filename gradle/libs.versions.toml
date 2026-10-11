@@ -1,0 +1,25 @@
+[versions]
+kotlin = "2.4.21"
+agp = "9.4.1"
+# Compose Multiplatform GRADLE PLUGIN only. The Compose LIBRARY versions come
+# from the bridge plugin's `composeDesktopNative` extension (shared/build.gradle.kts),
+# so they always match what the port tracks.
+composeMultiplatform = "1.12.1"
+# compose-desktop-native bridge plugin; also the default port klib version it
+# substitutes on the native desktop targets.
+composeDesktopNative = "1.12.1-2"
+androidxActivity = "1.13.0"
+androidCompileSdk = "37"
+androidTargetSdk = "37"
+androidMinSdk = "24"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
+
+[plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
+compose-desktop-native-bridge = { id = "com.bitsycore.compose-desktop-native.bridge", version.ref = "composeDesktopNative" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-kmp-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
