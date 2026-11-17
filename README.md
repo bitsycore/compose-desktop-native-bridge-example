@@ -60,7 +60,8 @@ counterpart of `compose.desktop.application { }`:
 
 - `entryPoint` declares the executable on every native desktop target;
 - `icon { }` bundles the window / taskbar icon (the same `bubble.png` the app
-  shows), selected in `Main.kt` with `AppWindowIcon`;
+  shows), selected in `Main.kt` with `AppWindowIcon`, and on Windows also
+  embeds it in the `.exe` (Explorer, shortcuts) - no extra tools needed;
 - the port's default fonts (Noto Sans, Noto Sans Italic, Noto Sans Mono) are
   bundled automatically, so text looks the same on every OS - `fonts { }`
   only opts out.
@@ -77,11 +78,16 @@ repository (see `settings.gradle.kts`) - no account, no token.
 
 | Toolchain | Version |
 |---|---|
-| compose-desktop-native (bridge plugin + klibs) | 1.12.1-2 |
-| Compose Multiplatform | 1.12.1 |
+| compose-desktop-native (bridge plugin + klibs) | 1.12.2-2 |
+| Compose Multiplatform | 1.12.2 |
 | Kotlin | 2.4.21 |
-| Android Gradle Plugin | 9.4.1 |
-| Gradle | 9.8.1 |
+| Android Gradle Plugin | 9.5.1 |
+| Gradle | 9.9.1 |
+
+Keep the Compose Multiplatform Gradle plugin (`composeMultiplatform` in the
+catalog) on the same version as the Compose libraries the bridge brings in
+(`composeDesktopNative.compose`). With an older Compose Gradle plugin the
+generated `Res` accessors are silently missing on the native targets.
 
 ## Run
 

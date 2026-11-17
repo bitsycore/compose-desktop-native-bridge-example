@@ -73,13 +73,11 @@ compose.desktop {
     // every native desktop target, and packages data.kres next to it.
     native {
         entryPoint = "bubblewrap.main"
-        // Window / taskbar icon: decoded to data.kres icon/bubble.rgba, picked up
-        // by Window(icon = AppWindowIcon(...)) in Main.kt.
+        // Window / taskbar icon (data.kres icon/bubble.rgba, picked up by
+        // Window(icon = AppWindowIcon(...)) in Main.kt) and, on Windows, the icon
+        // embedded in the .exe - no extra tools needed.
         icon {
             light.from("src/commonMain/composeResources/drawable/bubble.png")
-            // Embedding the icon in the Windows .exe needs `windres` (mingw-w64
-            // binutils) on PATH - off here so the example builds out of the box.
-            embedWindowsIcon.set(false)
         }
         // Noto Sans (+ Italic) and Noto Sans Mono, the port's default fonts, are
         // bundled into data.kres by default - `fonts { }` only opts out.

@@ -1,13 +1,15 @@
 [versions]
 kotlin = "2.4.21"
-agp = "9.4.1"
+agp = "9.5.1"
 # Compose Multiplatform GRADLE PLUGIN only. The Compose LIBRARY versions come
 # from the bridge plugin's `composeDesktopNative` extension (shared/build.gradle.kts),
-# so they always match what the port tracks.
-composeMultiplatform = "1.12.1"
+# so they always match what the port tracks. Keep this EQUAL to that Compose
+# version (composeDesktopNative.compose): an older Compose Gradle plugin silently
+# skips generating the Res accessors.
+composeMultiplatform = "1.12.2"
 # compose-desktop-native bridge plugin; also the default port klib version it
 # substitutes on the native desktop targets.
-composeDesktopNative = "1.12.1-2"
+composeDesktopNative = "1.12.2-2"
 androidxActivity = "1.13.0"
 androidCompileSdk = "37"
 androidTargetSdk = "37"
