@@ -9,7 +9,7 @@ agp = "9.5.1"
 composeMultiplatform = "1.12.2"
 # compose-desktop-native bridge plugin; also the default port klib version it
 # substitutes on the native desktop targets.
-composeDesktopNative = "1.12.2-2"
+composeDesktopNative = "1.12.2-3"
 androidxActivity = "1.13.0"
 androidCompileSdk = "37"
 androidTargetSdk = "37"
