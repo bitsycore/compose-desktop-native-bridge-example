@@ -78,7 +78,7 @@ repository (see `settings.gradle.kts`) - no account, no token.
 
 | Toolchain | Version |
 |---|---|
-| compose-desktop-native (bridge plugin + klibs) | 1.12.2-3 |
+| compose-desktop-native (bridge plugin + klibs) | 1.12.2-4 |
 | Compose Multiplatform | 1.12.2 |
 | Kotlin | 2.4.21 |
 | Android Gradle Plugin | 9.5.1 |
